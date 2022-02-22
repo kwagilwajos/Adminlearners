@@ -1,0 +1,34 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security.xsd">
+    <http auto-config="true">
+        <intercept-url pattern="/" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/subject/" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/teacher/" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/class/" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/class/assign/" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/student/" access="hasRole('ADMIN')"/>
+        <intercept-url pattern="/student/assign/" access="hasRole('ROLE_ADMIN')"/>
+
+        <form-login login-page='/login'
+                    default-target-url="/"
+                    authentication-failure-url="/login?error=true" />
+<!--        <logout invalidate-session="true" logout-success-url="/login?logout=true" />-->
+       <csrf disabled="true"/>
+    </http>
+    <authentication-manager>
+        <authentication-provider>
+            <password-encoder ref="passwordEncoder"/>
+            <user-service>
+                <user name="admin" password="$2a$12$khfVRZ/8PcMMYZXzHg9XBeFmyeGQ9uGPcwBbIz9H.4QOMRA42aMKK" authorities="ROLE_ADMIN"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean name="passwordEncoder"  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans:beans>
